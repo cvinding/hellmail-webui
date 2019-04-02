@@ -26,23 +26,17 @@
             <label for="formGroupExampleInput2">Adresse</label>
             <input type="text" class="form-control" id="address" placeholder="Adresse">
         </div>
-        <div class="row" style="margin: 0;">
-            <div class="form-group" style="width: 250px;">
-                <label for="formGroupExampleInput3">By</label>
-                <input type="text" class="form-control" id="town" placeholder="By">
-            </div>
-            <div class="form-group" style="max-width: 150px; margin-left: 20px;">
-                <label for="formGroupExampleInput4">Postnr</label>
-                <input type="text" class="form-control" id="zip-code" placeholder="Postnr">
-            </div>
-        </div>
         <div class="form-group">
             <label for="formGroupExampleInput5">Email</label>
             <input type="text" class="form-control" id="email" placeholder="Email">
         </div>
         <div class="form-group">
             <label for="formGroupExampleInput6">Kodeord</label>
-            <input type="text" class="form-control" id="password" placeholder="Kodeord">
+            <input type="password" class="form-control" id="password1" placeholder="Kodeord">
+        </div>
+        <div class="form-group">
+            <label for="formGroupExampleInput7">Kodeord</label>
+            <input type="password" class="form-control" id="password2" placeholder="Kodeord">
         </div>
         <p style="margin-bottom: 15px;">&nbsp;</p>
         <button type="button" class="container btn btn-success" style="max-width: 100px; float: left">Opret</button>
