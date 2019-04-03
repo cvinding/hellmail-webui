@@ -40,7 +40,7 @@
         </div>
         <p style="margin-bottom: 15px;">&nbsp;</p>
         <button type="button" class="container btn btn-success" style="max-width: 100px; float: left">Opret</button>
-        <button type="button" class="container btn btn-secondary" onclick="location.href = '/';" style="max-width: 200px; float: right">Allerede registeret?</button>
+        <button type="button" class="container btn btn-secondary" onclick="location.href = '/login';" style="max-width: 200px; float: right">Allerede registeret?</button>
     </form>
 
     </body>

@@ -22,7 +22,7 @@
         <div class="container" style="margin-top: 50px; margin-bottom: 80px; max-width: 350px; min-height: 50px;">
             <div>
                 <button type="button" class="btn btn-primary" onclick="location.href = '/createacc';" style="float: left; width: 150px; height: 50px; font-size: x-large;">Opret dig</button>
-                <button type="button" class="btn btn-primary" style="float: right; width: 120px; height: 50px; font-size: x-large;">Login</button>
+                <button type="button" class="btn btn-primary" onclick="location.href = '/login';" style="float: right; width: 120px; height: 50px; font-size: x-large;">Login</button>
             </div>
         </div>
 
