@@ -24,7 +24,7 @@
                         </div>
                         <!--<button type="button" id="submit-login" name="submit-login" class="btn btn-success container" style="margin-top: 20px">Login</button>-->
                         <div style="margin-top: 25px;">
-                        <button type="button" class="btn btn-primary" style="float: left; width: 150px;">Login</button>
+                        <button type="button" class="btn btn-primary" onclick="location.href = '/mailbox';" style="float: left; width: 150px;">Login</button>
                         <button type="button" class="container btn btn-secondary" onclick="location.href = '/createacc';" style=" width: 150px; float: right">Opret dig</button>
                         </div>
                     </form>
