@@ -10,6 +10,7 @@
 
     <body>
 
+
     <div class="navmenu row">
         <div class="row">
             <i class="fas fa-mail-bulk fa-5x" style="padding-bottom: 20px; padding-left: 20px; margin-right: 120px;"></i>
@@ -159,7 +160,7 @@
                     Er du sikker på du vil slette mail?
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-success">Ja</button>
+                    <button type="button" class="btn btn-success" id="deletemails-yes">Ja</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Nej</button>
                 </div>
             </div>

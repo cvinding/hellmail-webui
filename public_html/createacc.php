@@ -9,8 +9,9 @@
     </head>
     <body>
     <?php require_once "../templates/banner.html"; ?>
+    <?php require "php/adduser.php"; ?>
 
-    <form class="container" style="margin-top: 80px; margin-bottom: 150px; max-width: 450px;">
+    <form method="post" class="container" style="margin-top: 80px; margin-bottom: 150px; max-width: 450px;">
         <h1  style="text-align: center; margin-bottom: 40px;">Opret dig her</h1>
         <div class="row" style="margin: 0;">
             <div class="form-group">
@@ -21,10 +22,6 @@
                 <label for="formGroupExampleInput">Efternavn</label>
                 <input type="text" class="form-control" id="lastname"  placeholder="Efternavn">
             </div>
-        </div>
-        <div class="form-group">
-            <label for="formGroupExampleInput2">Adresse</label>
-            <input type="text" class="form-control" id="address" placeholder="Adresse">
         </div>
         <div class="form-group">
             <label for="formGroupExampleInput5">Email</label>
@@ -39,7 +36,7 @@
             <input type="password" class="form-control" id="password2" placeholder="Kodeord">
         </div>
         <p style="margin-bottom: 15px;">&nbsp;</p>
-        <button type="button" class="container btn btn-success" style="max-width: 100px; float: left">Opret</button>
+        <button type="button" class="container btn btn-success" id="add" style="max-width: 100px; float: left">Opret</button>
         <button type="button" class="container btn btn-secondary" onclick="location.href = '/login';" style="max-width: 200px; float: right">Allerede registeret?</button>
     </form>
 
