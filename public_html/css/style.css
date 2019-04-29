@@ -59,3 +59,6 @@ li {
     text-align: center;
     font-size: xx-large;
 }
+.required-field{
+    color: #cf0000;
+}

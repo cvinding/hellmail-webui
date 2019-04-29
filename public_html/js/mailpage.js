@@ -3,36 +3,37 @@ $(document).ready(function () {
     let sideantal = 10;
 
     pagenavigation(sideantal);
+    emptymailbox();
 
     //var inputmails = ["Julefrokost", "Det er snart jul og i den anledning har vi valgt at afholde en julefrokost", "Kent@hellmail.dk", "1"];
     //var inputmails = [ ["Julefrokost", "Det er snart jul og i den anledning har vi valgt at afholde en julefrokost", "Kent@hellmail.dk", "1"], ["Så er der kage", "Der er fandme kage i kantinen i dag", "Christian@hellmail.dk", "2"], ["Ny bygning", "Firmaet har opkøbt det lille firma (Microsoft) ved siden af eftersom vi skal bruge mere plads.", "Chefen@hellmail.dk", "3"], ["Nye medarbejdere", "Vi har stor mangel på medarbejdere så der er derfor ansat 100 nye medarbejdere.", "hrchef@hellmail.dk", "4"], ["Ny chef", "Vi har fået ny direktør eftersom jeg siger op. Tak for nogle gode år.", "Tobias@hellmail.dk", "5"] ];
 
     var inputmails = {
-      1:{
+      7:{
           subject:"Julefrokost",
           from:"Kent@hellmail.dk",
           body:"Det er snart jul og i den anledning har vi valgt at afholde en julefrokost",
           id:"1"
       },
-      2:{
+      8:{
           subject: "Så er der kage",
           from: "Christian@hellmail.dk",
           body:"Der er fandme kage i kantinen i dag",
           id:"2"
       },
-      3:{
+      9:{
           subject:"Ny bygning",
           from:"Chefen@hellmail.dk",
           body:"Firmaet har opkøbt det lille firma (Microsoft) ved siden af eftersom vi skal bruge mere plads.",
           id:"3"
       },
-      4:{
+      10:{
           subject:"Nye medarbejdere",
           from:"hrchef@hellmail.dk",
           body:"Vi har stor mangel på medarbejdere så der er derfor ansat 100 nye medarbejdere.",
           id:"4"
       },
-      5:{
+      11:{
           subject:"Ny chef",
           from:"Tobias@hellmail.dk",
           body:"Vi har fået ny direktør eftersom jeg siger op. Tak for nogle gode år.",
@@ -129,10 +130,11 @@ $(document).ready(function () {
 
         return li;
     }
+
     function getmails(mails) {
 
         const outputmail = $("#inmails");
-        //outputmail.html("");
+        outputmail.html("");
 
         /*for (let i = 0; i < mails.length; i++) {
             console.log(i);
@@ -140,7 +142,16 @@ $(document).ready(function () {
         }*/
 
         for (var mail in mails){
-            outputmail.append(createMails(mails[mail].subject, mails[mail].body, mails[mail].from, mails[mail].id));
+
+            if(mails[mail].body.length < "70"){
+                let shortbody = mails[mail].body;
+                outputmail.append(createMails(mails[mail].subject, shortbody, mails[mail].from, mail));
+            }
+            if(mails[mail].body.length > "70"){
+                let longbody = mails[mail].body.substring(0, 70) + "...";
+                outputmail.append(createMails(mails[mail].subject, longbody, mails[mail].from, mail));
+            }
+
         }
 
         $(".showmailpopup").on("click", function () {
@@ -150,7 +161,7 @@ $(document).ready(function () {
     }
     function showModalMail(mails, mailid) {
 
-        console.log(mailid);
+        console.log("Rigtig ID : " + mailid);
 
         $("#showmailmodalsubject").val(mails[mailid].subject);
         $("#showmailmodalbody").val(mails[mailid].body);
@@ -165,7 +176,6 @@ $(document).ready(function () {
 
         $("#Sletmail").modal('show');
 
-
         $("#deletemails-yes").attr("data-id", id.split("-")[1]);
         $("#deletemails-yes").on("click", clickDeleteConfirm);
     }
@@ -174,7 +184,10 @@ $(document).ready(function () {
 
         let mailID = $(this).attr("data-id");
 
+
         console.log("MAILID :" + mailID);
+
+        delete inputmails[mailID];
 
         //request("/api/info/deleteProduct", "POST", "id=" + productID, function (result) {
 
@@ -192,8 +205,24 @@ $(document).ready(function () {
             }*/
 
         getmails(inputmails);
+        emptymailbox();
+
         //});
     }
 
+    function isEmpty(inputmails) {
+        for(var mail in inputmails) {
+            if(inputmails.hasOwnProperty(mail))
+                return false;
+        }
+        return true;
+    }
+    function emptymailbox() {
+        const mailbox = $("#inmails");
+        if(isEmpty(inputmails)){
+            mailbox.html("DER ER INGEN MAILS!");
+        }
+
+    }
 
 });
