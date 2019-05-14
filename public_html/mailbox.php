@@ -43,12 +43,12 @@
             </form>
         </div>
     </nav>
-
+<div style="min-height: 600px;">
     <div class="container">
         <div class="" style="margin-top: 100px; margin-bottom: 50px;">
             <h1 class="container">Indbakke</h1>
         </div>
-        <div class="container" style="margin-bottom: 100px;">
+        <div class="container" style="margin-bottom: 100px; min-height: 350px;">
             <ul class="list-group" id="inmails">
             </ul>
         </div>
@@ -141,7 +141,7 @@
             </div>
         </div>
     </div>
-
+</div>
     <!-- Modal -->
     <div id="Sletmail" class="modal fade" role="dialog">
         <div class="modal-dialog" role="document">
