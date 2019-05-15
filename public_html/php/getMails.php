@@ -1,182 +1,171 @@
 <?php
+header('Content-Type: application/json');
 error_reporting(E_ALL);
 
-
-$mails = "To: tubbe@hellmail.dk
+// Test mails from a string, in the correct setup these mails will be from our POP client
+$mails =
+"To: christian@hellmail.dk
 From: kent@hellmail.dk
-Subject: Hej!
+Subject: Møder Tider
+Bcc: christian@hellmail.dk
+Cc: tubbe@lmao.dk
 
-\"Jeg er bøsse :)\"
+\"hej med jer
+To: \\\"Ok\\\"
+\"
 .
 
-To: tubbe@hellmail.dk
+To: christian@hellmail.dk
 From: kent@hellmail.dk
-Cc: christian@hellmail.dk
-Subject: Rettelse!
+Subject: Test
 
-\\\"Jeg er IKKE bøsse! Sidste mail var en fejl!!!
-hilsen kent\\\"
+\"Hej aber 
+Trump should be a peach 
+Upkiblers to the left\"
 .
 
-To: kent@hellmail.dk
-From: tubbe@hellmail.dk
-Cc: christian@hellmail.dk,chefen@hellmail.dk
-Bcc: hr@hellmail.dk
+";
 
-Hold op med at spamme spasser
-hilsen tubbe
-.";
+// Call our function separateMails()
+$mailArray = separateMails($mails);
 
-//getMailData($mails);
-
-    $separator = "\r\n";
-    $line = strtok($mails, $separator);
-    $linjenr = 0;
-
-    //while ($line !== false) {
-        # do something with $line
-
-        $linjenr ++;
-
-        //foreach ($mails as $line) {
-            //echo $line;
-        //}
-    //while (substr != false){
-    function getMailData($mails)
-    {
-        $strlength = strlen($mails);
-
-        $start = strpos($mails, 'To:');
-        $slut = strripos($mails, '\\"');
-
-        echo ("SLUTTER : $slut");
-        if ($start === 0){
+//var_dump($mailArray);
 
 
+echo json_encode($mailArray);
 
-            if ($start === 0 and strpos($mails, 'To:') !== false) {
-                $findtilstart = strpos($mails, 'To:')+3;
+/**
+ * separateMails() is used for separating a mail output from our POP Server after the RETR command has been issued
+ * @param string $mailData
+ * @return array
+ */
+function separateMails(string $mailData) : array {
 
-                $findtilslut = strpos($mails, "\n")-3;
-                echo("TO-nr : $findtilstart $findtilslut");
-                $toperson = substr($mails, $findtilstart, $findtilslut);
-                //echo $toperson;
+    // Required email tags
+    $rTags = ["To","From","Subject"];
 
-                $mails = substr($mails, $findtilslut+4, $strlength);
-                //$slut = $findtilslut;
-            }
+    // Optional email tags
+    $oTags = ["Cc","Bcc"];
 
-            $fromslut = strpos($mails, 'From:');
+    // Set StartIndex and EndIndex to 0
+    $startIndex = 0;
+    $endIndex = 0;
 
-            if (strpos($mails, 'From:') !== false and $fromslut < $slut) {
-                $findfromstart = strpos($mails, 'From:')+5;
+    // Set the Ouput array
+    $output = [];
 
-                $findfromslut = strpos($mails, "\n")-5;
-                echo("FROM-nr : $findfromstart $findfromslut");
-                $fromperson = substr($mails, $findfromstart, $findfromslut);
-                //echo $fromperson;
+    // Set the int variable
+    $i = 0;
 
-                $mails = substr($mails, $findfromslut+6, $strlength);
-                //$slut = $findfromslut;
-            }
-           if (strpos($mails, 'Cc:') !== false) {
-               $findccstart = strpos($mails, 'Cc:')+3;
+    while(true) {
 
-               $findccslut = strpos($mails, "\n")-3;
-               echo("Cc : $findccstart $findccslut");
-               $subjectmail = substr($mails, $findccstart, $findccslut);
-               //echo $fromperson;
-
-               //$mails = substr($mails, $findfromslut, $strlength);
-               //$slut = $findfromslut;
-            }
-    /*        if (strpos($mails, 'Bcc:') !== false) {
-                echo("FRA");
-                $fromperson = $mails;
-            }
-            if (strpos($mails, 'Subject:') !== false) {
-                $findemnestart = strpos($mails, 'Subject:');
-
-                $findemneslut = strpos($mails, "\n");
-                echo("EMNE : $findemnestart $findemneslut");
-            }
-            if (strpos($mails, '\\"') !==false) {
-                echo("Besked");
-            }
-
-            if (strpos($mails, '.') !==false) {
-                echo("SLUT");
-            }*/
-
-            echo $toperson;
-            echo $fromperson;
-            echo $subjectmail;
-        }
-    }
-
-        //echo ("Linjenr : $linjenr $mails");
-
-        //$line = strtok( $separator );
-    //}
-
-
-separateMails($mails);
-
-    function separateMails(string $mailData) : array {
-
-        $rTags = ["To","From","Subject"];
-        $oTags = ["Cc","Bcc"];
-
-        $startIndex = 0;
-        $endIndex = 0;
-
-        while(true) {
-
-            if($endIndex !== 0) {
-                $startIndex = $endIndex++;
-            }
-
-            $endIndex = strpos(substr($mailData, $startIndex), "\"".PHP_EOL."." . PHP_EOL);
-
-            $mail = substr($mailData, $startIndex, $endIndex);
-
-            //echo $mail.PHP_EOL;
-
-            foreach($rTags as $tag) {
-
-                $index = strpos($mail, PHP_EOL."".$tag.":");
-
-                if($index === false) {
-                    $index = strpos($mail, $tag.":");
-
-                    if($index !== 0) {
-                        echo "CONTINUED";
-                        continue;
-                    }
-                }
-
-                //echo $tag . " : " . strlen($tag) . "<br>";
-
-                echo substr($mail,$index, $index+7)."<br>";
-
-                $start = $index + strlen($tag) + 2;
-
-                $tagData = substr($mail, $start, strpos(substr($mail, $start), PHP_EOL));
-
-
-                //echo $tagData."<br>";
-
-                //echo substr($mail, strlen($tag) + 2).PHP_EOL.PHP_EOL.PHP_EOL;
-
-                //echo( $tagData).PHP_EOL;
-
-            }
-
+        // If we happen to get to the end of the mail, break the while(true) loop
+        if(($startIndex + $endIndex + 4) === strlen($mailData)) {
             break;
         }
 
-        return [0 => ["to" => "tubbe@hellmail.dk"]];
+        // Set ContinueEarly to false
+        $continueEarly = false;
+
+        // Set StartIndex if EndIndex is not 0
+        if($endIndex !== 0) {
+            $startIndex = $startIndex + $endIndex + 4;
+        }
+
+        // Find EndIndex
+        $endIndex = strpos(substr($mailData, $startIndex), "\"\n.\n")  + 1;
+
+        // Get the mail
+        $mail = substr($mailData, $startIndex, $endIndex);
+
+        $headers = substr($mail, 0, strpos($mail, "\n\n"))."\n";
+
+        $body = substr($mail,  strpos($mail, "\n\n") + 1);
+
+        // Loop through all the required tags
+        foreach($rTags as $tag) {
+
+            // The tag's start index
+            $index = strpos($headers, "\n".$tag.":");
+
+            // If there is no tag to be found
+            if($index === false) {
+
+                // Try again without a \n
+                $index = strpos($headers, $tag.":");
+
+                // If the index is NOT 0 set ContinueEarly to true and break the foreach loop
+                if($index !== 0) {
+                    $continueEarly = true;
+                    break;
+                }
+            }
+
+            // Set the start index
+            if ($index == 0){
+                $start = $index + strlen($tag) + 2;
+            } else {
+                $start = $index + strlen($tag) + 3;
+            }
+
+            // Find the TagData
+            $tagData = substr($headers, $start, strpos(substr($headers, $start), "\n"));
+
+            // Set the Tag to TagData
+            $output[$i][strtolower($tag)] = trim($tagData,"\n");
+
+        }
+
+        // If ContinueEarly is true, delete data from the previous cycle and continue the while(true) loop
+        if($continueEarly) {
+            unset($output[$i]);
+            continue;
+        }
+
+        // Loop through all optional tags
+        foreach($oTags as $tag) {
+
+            // The tag's start index
+            $index = strpos($headers, "\n".$tag.":");
+
+            // If there is no tag to be found
+            if($index === false) {
+
+                // Try again without a \n
+                $index = strpos($headers, $tag.":");
+
+                // If the index is NOT 0 continue the foreach loop
+                if($index !== 0) {
+                    continue;
+                }
+            }
+
+            // Set the start index
+            if ($index == 0){
+                $start = $index + strlen($tag) + 2;
+            } else {
+                $start = $index + strlen($tag) + 3;
+            }
+
+            // Find the TagData
+            $tagData = substr($headers, $start, strpos(substr($headers, $start), PHP_EOL));
+
+            // Set the Tag to TagData
+            $output[$i][strtolower($tag)] = $tagData;
+        }
+
+
+
+        $output[$i]["body"] = substr($body, 2, strlen($body) - 3);
+
+        // Increment the i
+        $i++;
+
     }
+
+    // Return the output when done
+    return $output;
+}
 
 
 ?>
