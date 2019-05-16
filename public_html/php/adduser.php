@@ -1,4 +1,5 @@
 <?php
+header("Content-Type: application/json");
 /**
  * Created by PhpStorm.
  * User: tubbe
@@ -12,56 +13,44 @@ server with default setting (user 'root' with no password) */
 
     // Check connection
     if($link === false){
-        die("ERROR: Could not connect. " . mysqli_connect_error());
+        die(json_encode(["status" => 1]));
     }
 
-    $fornavn = $_POST['addfirstname'];
-    $efternavn = $_POST['addlastname'];
-    $email = $_POST['addemail'];
-    $kodeord1 = $_POST['addpassword1'];
-    $kodeord2 = $_POST['addpassword2'];
+    $fornavn = $_POST["firstname"];
+    $efternavn = $_POST['lastname'];
+    $email = $_POST['email'];
+    $kodeord1 = $_POST["password1"];
+    $kodeord2 = $_POST["password2"];
 
+    $email = $email . "@hellmail.dk";
 
     // Attempt insert query execution
-    //$sql = "SELECT email FROM users WHERE email='$email'";
+    $sql = "SELECT email FROM users WHERE email='$email'";
 
-    if ($kodeord1 === $kodeord2){
+    $result = mysqli_query($link, $sql);
 
-        $sql = "INSERT INTO users (firstname, lastname, email, password) VALUES ('$fornavn', '$efternavn', '$email', '$kodeord1')";
+    if($result->num_rows == 0) {
 
-        if(mysqli_query($link, $sql)){
-            echo "Records inserted successfully.";
-        } else{
-            echo "ERROR: Could not able to execute $sql. " . mysqli_error($link);
+        if ($kodeord1 === $kodeord2){
+
+            $kodeord = password_hash($kodeord1, PASSWORD_DEFAULT);
+
+            $sql = "INSERT INTO users (firstname, lastname, email, password) VALUES ('$fornavn', '$efternavn', '$email', '$kodeord')";
+
+            if(mysqli_query($link, $sql)){
+                echo json_encode(["status" => 0]);
+            }
+            else{
+                echo json_encode(["status" => 4]);
+            }
+        }
+        else{
+            echo json_encode(["status" => 3]);
         }
     }
     else{
-        echo "Password matcher ikke";
+        echo json_encode(["status" => 2]);
     }
-    //echo $_REQUEST['addfirstname'];
-/*if (isset($_POST['submit']))
-{
-    echo "button 1 has been pressed";
-
-    echo $fornavn;
-    echo $efternavn;
-
-    if(mysqli_query($link, $sql)){
-        echo "Mail optaget!";
-    } else{
-        //echo "ERROR: Could not able to execute $sql. " . mysqli_error($link);
-        //if($kodeord1 === $kodeord2){
-            $sql = "INSERT INTO users (firstname, lastname, email, password) VALUES
-                    ('Jens ', 'Peter', 'Jenss@hotmail.com','12345678')";
-
-            if(mysqli_query($link, $sql)){
-                echo "Records added successfully.";
-            } else{
-                echo "ERROR: Could not able to execute $sql. " . mysqli_error($link);
-            }
-        //}
-    }
-}*/
     // Close connection
    mysqli_close($link);
 ?>

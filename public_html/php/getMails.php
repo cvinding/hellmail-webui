@@ -1,5 +1,5 @@
 <?php
-header('Content-Type: application/json');
+/*header('Content-Type: application/json');
 error_reporting(E_ALL);
 
 // Test mails from a string, in the correct setup these mails will be from our POP client
@@ -39,6 +39,7 @@ echo json_encode($mailArray);
  * @param string $mailData
  * @return array
  */
+/*
 function separateMails(string $mailData) : array {
 
     // Required email tags
@@ -82,8 +83,17 @@ function separateMails(string $mailData) : array {
 
         $body = substr($mail,  strpos($mail, "\n\n") + 1);
 
+
+
+        /*echo "HEA22DERS: " . $headers."<br>";
+
+        if( $i == 2) {
+            Break;
+        }*/
+
+
         // Loop through all the required tags
-        foreach($rTags as $tag) {
+ /*       foreach($rTags as $tag) {
 
             // The tag's start index
             $index = strpos($headers, "\n".$tag.":");
@@ -167,5 +177,5 @@ function separateMails(string $mailData) : array {
     return $output;
 }
 
-
+*/
 ?>
