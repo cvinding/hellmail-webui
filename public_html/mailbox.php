@@ -43,6 +43,9 @@
             </form>
         </div>
     </nav>
+    <div style="float: right; margin: 50px;">
+        <button type="button" class="logoutbutton btn btn-default" onclick="location.href = '/login';">Logout</button>
+    </div>
 <div style="min-height: 600px;">
     <div class="container">
         <div class="" style="margin-top: 100px; margin-bottom: 50px;">
