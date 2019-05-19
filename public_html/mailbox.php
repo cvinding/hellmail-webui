@@ -90,8 +90,8 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <form method="post" style="padding: 10px;">
-                    <div class="ui-message">
-                    </div>
+                    <div class="ui-message"></div>
+
                     <div class="form-group">
                         <label for="sendto">Modtager</label>
                         <input type="text" required="required" class="form-control" id="sendto" placeholder="Modtager@hellmail.dk">

@@ -1,4 +1,5 @@
 <?php
+session_start();
 header("Content-Type: application/json");
 /**
  * Created by PhpStorm.
@@ -28,6 +29,7 @@ header("Content-Type: application/json");
         $userdata =$result1 -> fetch_assoc();
 
         if (password_verify($password, $userdata["password"])) {
+            $_SESSION["email"] = $userdata["email"];
             echo json_encode(["status" => 0]);
         } else {
             echo json_encode(["status" => 1]);

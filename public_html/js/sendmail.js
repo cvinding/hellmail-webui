@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-    $("#sendmail-yes").on("click", checkinput);
+    $("#sendmail-yes").on("click", senddata);
 
 
     checkRequired = function(form, title, msg, msgOut){
@@ -27,7 +27,7 @@ $(document).ready(function () {
     }
 
 
-
+/*
     function checkinput(e) {
 
         const form = $($(this).parent("div")[0]).closest("form");
@@ -43,10 +43,10 @@ $(document).ready(function () {
             form[0].reset();
             uiBox.html("");
 
-            $('#Sendmail').modal('hide');
+            //$('#Sendmail').modal('hide');
         }
     }
-
+*/
 
 
     function sendinformation(e) {
@@ -92,4 +92,53 @@ $(document).ready(function () {
         // Return all elements appended to the div
         return div;
     };
+
+    function senddata() {
+
+        var to = document.getElementById("sendto").value;
+        var subject = document.getElementById("sendsubject").value;
+        var message = document.getElementById("sendbody").value;
+
+        var statusser = ['Tillykke', 'Indtast modtager og emne'];
+
+        const form = $($(this).parent("div")[0]).closest("form");
+        const uiBox = $(form.children(".ui-message"));
+
+        if(!checkRequired(form, "Vigtigt","Skriv lige i felterne", uiBox)) {
+
+            $.ajax({
+                data: {
+                    to : to,
+                    subject : subject,
+                    message : message
+                },
+                url: 'php/sendmail.php',
+                method: 'POST', // or GET
+
+                success: function(msg) {
+                    console.log(msg);
+                    if(msg.status === 0){
+                        uiBox.html(createDismissibleMessage("success", "Mail sendt", statusser[msg.status]));
+
+                        form[0].reset();
+
+                        setTimeout(function () {
+                            $('#Sendmail').modal('hide');
+                            uiBox.html("");
+                        }, 1500);
+
+                    }
+                    else{
+                        uiBox.html(createDismissibleMessage("danger", "Fejl", statusser[msg.status]))
+                    }
+                },
+                error: function (msg) {
+                    console.log(msg);
+                }
+            });
+        }
+
+
+    }
+
 });
