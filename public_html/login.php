@@ -13,19 +13,21 @@
             <div class="loginbox media" style="border:1px solid black; border-radius: 5px; background-color: white; padding: 50px; margin: 0; width: 500px;">
                 <div class="media-body login">
                     <h5 class="mt-0" style="text-align: center">Login</h5>
+
                     <form class="login">
+                        <div class="ui-message"></div>
                         <div class="form-group">
-                            <label for="formGroupExampleInput">Brugernavn</label>
-                            <input type="text" class="form-control" name="username-input" id="username-input" placeholder="Brugernavn">
+                            <label for="username-input">Email</label>
+                            <input type="text" class="form-control" required="required" name="username-input" id="username-input" placeholder="Email">
                         </div>
                         <div class="form-group">
-                            <label for="formGroupExampleInput2">Kodeord</label>
-                            <input type="password" class="form-control" name="password-input" id="password-input" placeholder="Kodeord">
+                            <label for="password-input">Kodeord</label>
+                            <input type="password" class="form-control" required="required" name="password-input" id="password-input" placeholder="Kodeord">
                         </div>
                         <!--<button type="button" id="submit-login" name="submit-login" class="btn btn-success container" style="margin-top: 20px">Login</button>-->
                         <div style="margin-top: 25px;">
-                        <button type="button" class="btn btn-primary" onclick="location.href = '/mailbox';" style="float: left; width: 150px;">Login</button>
-                        <button type="button" class="container btn btn-secondary" onclick="location.href = '/createacc';" style=" width: 150px; float: right">Opret dig</button>
+                            <button type="button" class="btn btn-primary" id="submitlogin" style="float: left; width: 150px;">Login</button>
+                            <button type="button" class="container btn btn-secondary" onclick="location.href = '/createacc';" style=" width: 150px; float: right">Opret dig</button>
                         </div>
                     </form>
                 </div>
@@ -40,3 +42,5 @@
 <script src="libs/jquery/jquery-3.3.1.min.js"></script>
 <script src="libs/popper/popper.min.js"></script>
 <script src="libs/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
+<script src="/js/helper.js"></script>
+<script src="/js/login.js"></script>
