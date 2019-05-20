@@ -29,8 +29,8 @@ $(document).ready(function () {
                 method: 'POST', // or GET
 
                 success: function(msg) {
-                    console.log(statusser[msg.status]);
-                    console.log(msg);
+                    //console.log(statusser[msg.status]);
+                    //console.log(msg);
 
                     if(msg.status === 0){
                         uiBox.html(createDismissibleMessage("success", "Godkent", statusser[msg.status]));
@@ -43,7 +43,7 @@ $(document).ready(function () {
                     }
                 },
                 error: function (msg) {
-                    console.log(msg);
+                    //console.log(msg);
                 }
             });
         }

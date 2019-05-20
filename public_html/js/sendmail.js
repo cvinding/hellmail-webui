@@ -116,7 +116,7 @@ $(document).ready(function () {
                 method: 'POST', // or GET
 
                 success: function(msg) {
-                    console.log(msg);
+                    //console.log(msg);
                     if(msg.status === 0){
                         uiBox.html(createDismissibleMessage("success", "Mail sendt", statusser[msg.status]));
 
@@ -133,7 +133,7 @@ $(document).ready(function () {
                     }
                 },
                 error: function (msg) {
-                    console.log(msg);
+                    //console.log(msg);
                 }
             });
         }
