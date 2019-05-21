@@ -9,7 +9,7 @@ header("Content-Type: application/json");
 
 /* Attempt MySQL server connection. Assuming you are running MySQL
 server with default setting (user 'root' with no password) */
-    $link = mysqli_connect("localhost", "root", "", "mailserver");
+    $link = mysqli_connect("127.0.0.1", "service.hellmail", "HellboServices!", "hellmail");
 
     // Check connection
     if($link === false){
@@ -25,7 +25,7 @@ server with default setting (user 'root' with no password) */
     $email = $email . "@hellmail.dk";
 
     // Attempt insert query execution
-    $sql = "SELECT email FROM users WHERE email='$email'";
+    $sql = "SELECT email FROM Users WHERE email='$email'";
 
     $result = mysqli_query($link, $sql);
 
@@ -35,7 +35,7 @@ server with default setting (user 'root' with no password) */
 
             $kodeord = password_hash($kodeord1, PASSWORD_DEFAULT);
 
-            $sql = "INSERT INTO users (firstname, lastname, email, password) VALUES ('$fornavn', '$efternavn', '$email', '$kodeord')";
+            $sql = "INSERT INTO Users (firstname, surname, email, password) VALUES ('$fornavn', '$efternavn', '$email', '$kodeord')";
 
             if(mysqli_query($link, $sql)){
                 echo json_encode(["status" => 0]);
