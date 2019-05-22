@@ -2,7 +2,7 @@
 A webapplication for interacting with <a href="https://github.com/czvr0/helvegr"> helvegr CLI mail client </a>
 * AJAX
 * PHP 7.2
-* JS
+* GPL-3.0 Licensed
 
 # Libraries
 * Bootstrap https://getbootstrap.com/ (MIT License)
