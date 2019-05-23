@@ -9,7 +9,7 @@ header("Content-Type: application/json");
  */
 
 /*server with default setting (user 'root' with no password) */
-    $link = mysqli_connect("localhost", "root", "", "mailserver");
+    $link = mysqli_connect("127.0.0.1", "service.hellmail", "HellboServices!", "hellmail");
 
     if($link === false){
         die(json_encode(["status" => 1]));
@@ -18,7 +18,7 @@ header("Content-Type: application/json");
     $brugernavn = $_POST['brugernavn'];
     $password = $_POST['password'];
 
-    $sql = "SELECT * FROM users WHERE email='$brugernavn' limit 1";
+    $sql = "SELECT * FROM Users WHERE email='$brugernavn' limit 1";
 
     $result1 = mysqli_query($link, $sql);
 
