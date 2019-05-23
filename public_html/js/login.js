@@ -46,6 +46,22 @@ $(document).ready(function () {
                     //console.log(msg);
                 }
             });
+
+            $.ajax({
+                data: {
+                    brugernavn : brugernavn
+                },
+                url: 'php/getMails.php',
+                method: 'POST', // or GET
+
+                success: function(msg) {
+                    //console.log(statusser[msg.status]);
+                    //console.log(msg);
+                },
+                error: function (msg) {
+                    //console.log(msg);
+                }
+            });
         }
 
 

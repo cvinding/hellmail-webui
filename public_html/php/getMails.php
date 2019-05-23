@@ -39,6 +39,57 @@ echo json_encode($mailArray);
  * @param string $mailData
  * @return array
  */
+
+function antalMails(){
+
+    $brugernavn = $_POST["brugernavn"];
+
+    $mailcommand = "helvegr hpop --username \".$brugernavn.\" --password \"dufårdetherpasswordoomsnart\" --stat RECIEVED";
+
+    exec ($mailcommand, $result );
+
+    //exec($mailcommand);
+
+    return $result;
+
+}
+
+function indbakke(){
+
+    $result = antalMails();
+    $antalmails = $result[1];
+    $start = 1;
+    $slut = 25;
+    $mailIDS = [];
+    $id = "";
+
+    $brugernavn = $_POST["brugernavn"];
+
+    while(slut < $antalmails){
+
+        $mailcommand = "helvegr hpop --username \".$brugernavn.\" --password \"dufårdetherpasswordoomsnart\" --list RECIEVED --start ".$start." --end ".$slut."";
+
+        exec ($mailcommand, $result);
+
+        foreach($result as $i){
+            $mailIDS[] = $i;
+        }
+
+        $start = $start + 20;
+        $slut = $slut + 20;
+    }
+
+    foreach($mailIDS as $a){
+        $id .= $a . " ";
+    }
+
+    $mailcommand = "helvegr hpop --username \" . $brugernavn . \" --password \"dufårdetherpasswordoomsnart\" --retrieve ".$id."";
+
+    exec ($mailcommand, $mails);
+
+    return $mails;
+}
+
 /*
 function separateMails(string $mailData) : array {
 
