@@ -17,7 +17,7 @@ header("Content-Type: application/json");
 
 	// remember to use "smtp/hpop" later
 
-        $mailcommand = "helvegr --to ".$to." --from ".$_SESSION["email"]." --subject \"".$subject."\" ";
+        $mailcommand = "helvegr smtp --to ".$to." --from ".$_SESSION["email"]." --subject \"".$subject."\" --password 123456789 ";
 
         foreach ($tags as $tag){
             if (isset($_POST[$tag])){

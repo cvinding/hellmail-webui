@@ -1,3 +1,4 @@
+<?php session_start()?>
 <!DOCTYPE html>
 <html lang="dk">
     <head>
@@ -60,21 +61,10 @@
     <nav aria-label="Page navigation example" class="container" style="margin-bottom: 50px;">
         <ul class="pagination container" id="pageside">
             <li class="page-item">
-                <a class="page-link" href="#!" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                    <span class="sr-only">Previous</span>
-                </a>
             </li>
                 <div class="row" id="pagenumber" style="margin: 0;">
-                    <li class="page-item"><a class="page-link" href="#!">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#!">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#!">3</a></li>
                 </div>
             <li class="page-item">
-                <a class="page-link" href="#!" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                    <span class="sr-only">Next</span>
-                </a>
             </li>
         </ul>
     </nav>
@@ -168,7 +158,6 @@
 
 
     <?php require_once "../templates/footer.html"; ?>
-
     </body>
 
 </html>

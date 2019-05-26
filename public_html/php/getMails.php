@@ -1,8 +1,101 @@
 <?php
-/*header('Content-Type: application/json');
-error_reporting(E_ALL);
+session_start();
+header('Content-Type: application/json');
+//ini_set('display_errors', 1);
+//ini_set('display_startup_errors', 1);
+//error_reporting(E_ALL);
 
-// Test mails from a string, in the correct setup these mails will be from our POP client
+
+
+//$email = $_SESSION["email"];
+
+//echo $email;
+//echo $email2;
+
+//echo $_SERVER["SERVER_NAME"];
+
+
+$brugernavn = $_SESSION["email"];
+$inbox = (isset($_POST['inbox'])) ? $_POST['inbox'] : "SENT";
+
+indbakke($brugernavn, $inbox);
+//antalMails();
+function antalMails($bruger, $method){
+
+//$brugernavn = "christian@hellmail.dk";
+$number = "";
+//echo $brugernavn;
+//$brugernavn = "";
+
+//echo $brugernavn;
+
+$mailcommand = "helvegr hpop --username ".$bruger." --password 123456789 --stat ".$method."";
+
+exec ($mailcommand, $result);
+
+foreach($result as $o){
+//	echo " $o <br>";
+	$number .= $o ." "; 
+}
+return $number;
+}
+
+function indbakke($bruger, $method){
+
+$result = antalMails($bruger, $method);
+$antalmails = preg_replace('/[^0-9]/', '', $result);
+//echo "ANTALMAILS $antalmails ";
+//echo "Antalmails : $antalmails";
+
+
+
+//$page = $_POST["page"];
+//$page = 1;
+$page = (isset($_POST['page'])) ? $_POST['page'] : 1;
+$slut = (25*$page);
+$start = 1+($slut-25);
+
+$mailIDS = [];
+$id = "";
+
+//$brugernavn = $_SESSION["email"];
+
+//echo $brugernavn;
+
+//while($slut < $antalmails){
+//echo "START : $start";
+//echo "SLUT : $slut";
+$mailcommand = "helvegr hpop --username ".$bruger." --password 123456789 --list ".$method." --start ".$start." --end ".$slut."";
+exec ($mailcommand, $result2);
+	
+        for($i=1; $i<sizeof($result2)-1; $i++){
+//echo $i;
+            $mailIDS[] = $result2[$i];
+        }
+//}
+foreach($mailIDS as $a){
+        $id .= $a . " ";
+    }
+	$id = rtrim($id, " ");
+
+    $mailcommand = "helvegr hpop --username ".$bruger." --password 123456789 --retrieve \"".$id."\"";
+
+	//exec ($mailcommand, $mails);
+	$mailstring = shell_exec($mailcommand);
+	$mailstring = substr($mailstring, 4, -7);
+//echo $mailstring;
+
+	//foreach($mails as $h){
+//	echo ".$h. ";
+//}
+//$mailtext = implode("\n", array_slice($mails, 1, -1));
+//echo $mailstring;
+echo json_encode(separateMails($mailstring, $mailIDS, $antalmails));
+
+//	echo json_encode(separateMails($mails));
+}
+
+/* Test mails from a string, in the correct setup these mails will be from our POP client
 $mails =
 "To: christian@hellmail.dk
 From: kent@hellmail.dk
@@ -25,7 +118,7 @@ Upkiblers to the left\"
 .
 
 ";
-
+/*
 // Call our function separateMails()
 $mailArray = separateMails($mails);
 
@@ -39,8 +132,12 @@ echo json_encode($mailArray);
  * @param string $mailData
  * @return array
  */
-/*
-function separateMails(string $mailData) : array {
+
+//echo $mails;
+
+//var_dump(separateMails($mails));
+
+function separateMails(string $mailData, array $mailIDS, string $total) : array {
 
     // Required email tags
     $rTags = ["To","From","Subject"];
@@ -61,9 +158,11 @@ function separateMails(string $mailData) : array {
     while(true) {
 
         // If we happen to get to the end of the mail, break the while(true) loop
-        if(($startIndex + $endIndex + 4) === strlen($mailData)) {
+        if(($startIndex + $endIndex + 4) === (strlen($mailData)+1)) {
             break;
         }
+//	echo "TEST : ".($startIndex + $endIndex+4). "<br>";
+//	echo "Length : ".(strlen($mailData))."<br>";	
 
         // Set ContinueEarly to false
         $continueEarly = false;
@@ -85,15 +184,15 @@ function separateMails(string $mailData) : array {
 
 
 
-        /*echo "HEA22DERS: " . $headers."<br>";
+  //      echo "HEA22DERS: " . $headers."<br>";
 
-        if( $i == 2) {
+        /*if( $i == 3) {
             Break;
         }*/
 
 
         // Loop through all the required tags
- /*       foreach($rTags as $tag) {
+        foreach($rTags as $tag) {
 
             // The tag's start index
             $index = strpos($headers, "\n".$tag.":");
@@ -122,13 +221,14 @@ function separateMails(string $mailData) : array {
             $tagData = substr($headers, $start, strpos(substr($headers, $start), "\n"));
 
             // Set the Tag to TagData
-            $output[$i][strtolower($tag)] = trim($tagData,"\n");
+            $output[$mailIDS[$i]][strtolower($tag)] = trim($tagData,"\n");
 
         }
 
         // If ContinueEarly is true, delete data from the previous cycle and continue the while(true) loop
-        if($continueEarly) {
-            unset($output[$i]);
+        
+	if($continueEarly) {
+            unset($output[$mailIDS[$i]]);
             continue;
         }
 
@@ -161,12 +261,12 @@ function separateMails(string $mailData) : array {
             $tagData = substr($headers, $start, strpos(substr($headers, $start), PHP_EOL));
 
             // Set the Tag to TagData
-            $output[$i][strtolower($tag)] = $tagData;
+            $output[$mailIDS[$i]][strtolower($tag)] = $tagData;
         }
 
 
 
-        $output[$i]["body"] = substr($body, 2, strlen($body) - 3);
+        $output[$mailIDS[$i]]["body"] = substr($body, 2, strlen($body) - 3);
 
         // Increment the i
         $i++;
@@ -174,8 +274,8 @@ function separateMails(string $mailData) : array {
     }
 
     // Return the output when done
-    return $output;
+    	$output["antal"]=$total;
+	return $output;
 }
 
-*/
 ?>

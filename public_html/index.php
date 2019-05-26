@@ -31,8 +31,6 @@
     </body>
     <?php require_once "../templates/footer.html"; ?>
 
-    <?php require_once "php/getMails.php"; ?>
-
 </html>
 <script src="libs/jquery/jquery-3.3.1.min.js"></script>
 <script src="libs/popper/popper.min.js"></script>

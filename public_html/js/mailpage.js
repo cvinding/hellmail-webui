@@ -1,47 +1,60 @@
 $(document).ready(function () {
 
-    let sideantal = 10;
+    //let sideantal = 10;
 
-    pagenavigation(sideantal);
-    emptymailbox();
+   // emptymailbox();
 
-    //var inputmails = ["Julefrokost", "Det er snart jul og i den anledning har vi valgt at afholde en julefrokost", "Kent@hellmail.dk", "1"];
-    //var inputmails = [ ["Julefrokost", "Det er snart jul og i den anledning har vi valgt at afholde en julefrokost", "Kent@hellmail.dk", "1"], ["Så er der kage", "Der er fandme kage i kantinen i dag", "Christian@hellmail.dk", "2"], ["Ny bygning", "Firmaet har opkøbt det lille firma (Microsoft) ved siden af eftersom vi skal bruge mere plads.", "Chefen@hellmail.dk", "3"], ["Nye medarbejdere", "Vi har stor mangel på medarbejdere så der er derfor ansat 100 nye medarbejdere.", "hrchef@hellmail.dk", "4"], ["Ny chef", "Vi har fået ny direktør eftersom jeg siger op. Tak for nogle gode år.", "Tobias@hellmail.dk", "5"] ];
 
-    var inputmails = {
-      7:{
-          subject:"Julefrokost",
-          from:"Kent@hellmail.dk",
-          body:"Det er snart jul og i den anledning har vi valgt at afholde en julefrokost",
-          id:"1"
-      },
-      8:{
-          subject: "Så er der kage",
-          from: "Christian@hellmail.dk",
-          body:"Der er fandme kage i kantinen i dag",
-          id:"2"
-      },
-      9:{
-          subject:"Ny bygning",
-          from:"Chefen@hellmail.dk",
-          body:"Firmaet har opkøbt det lille firma (Microsoft) ved siden af eftersom vi skal bruge mere plads.",
-          id:"3"
-      },
-      10:{
-          subject:"Nye medarbejdere",
-          from:"hrchef@hellmail.dk",
-          body:"Vi har stor mangel på medarbejdere så der er derfor ansat 100 nye medarbejdere.",
-          id:"4"
-      },
-      11:{
-          subject:"Ny chef",
-          from:"Tobias@hellmail.dk",
-          body:"Vi har fået ny direktør eftersom jeg siger op. Tak for nogle gode år.",
-          id:"5"
-      }
-    };
 
-    getmails(inputmails);
+let mailside = window.location.href.split(".dk/")[1];
+mailside = mailside.split(".")[0];
+let inbox = "RECIEVED";
+
+//console.log(mailside);
+
+if(mailside === "mailbox"){
+inbox = "RECIEVED";
+}
+if(mailside === "mailboxsend"){
+inbox = "SENT";
+}
+
+
+retrieveMails(inbox);
+let globalmails;
+
+function retrieveMails(inbox){
+	const href = window.location.href;
+	let page;	
+
+	if(href.indexOf("?")===-1){
+		page=1;
+
+	}
+	else{
+	page=href.split("=")[1];
+}
+ 	$.ajax({
+		data:{
+		page : page,
+		inbox : inbox
+},
+                url: 'https://hellmail.dk/php/getMails.php',
+                method: 'POST', // or GET
+
+                success: function(mails) {
+                getmails(mails);
+		globalmails = mails;   
+                pagenavigation(Math.ceil(globalmails.antal/25));
+		},
+                error: function (mails) {
+                 
+		}
+        });
+
+}
+
+    //getmails(inputmails);
     /*
     <li class="page-item"><a class="page-link" href="#!">1</a></li>
     <li class="page-item"><a class="page-link" href="#!">2</a></li>
@@ -55,7 +68,7 @@ $(document).ready(function () {
 
         let a = document.createElement("a");
         a.className = "page-link";
-        a.href = "#!";
+        a.href = mailside + ".php?page=" + sidetal;
         a.innerHTML = sidetal;
 
         /*let card = document.createElement("div");
@@ -131,6 +144,18 @@ $(document).ready(function () {
         return li;
     }
 
+    function reversemails(obj, f){
+	var arr = [];
+  	for (var key in obj) {
+    		// add hasOwnPropertyCheck if needed
+            arr.push(key);
+        }
+        for (var i=arr.length-1; i>=0; i--) {
+            f.call(obj, arr[i]);
+        }
+
+}
+
     function getmails(mails) {
 
         const outputmail = $("#inmails");
@@ -140,8 +165,23 @@ $(document).ready(function () {
             console.log(i);
             outputmail.append(createMails(mails[i][0], mails[i][1], mails[i][2], mails[i][3]));
         }*/
+	//console.log(mails.antal);
+	reversemails(mails, function(mailkey){
+	if(mailkey !== "antal"){
+	
+	
+		if(this[mailkey].body.length < "70"){
+                let shortbody = this[mailkey].body;
+                outputmail.append(createMails(this[mailkey].subject, shortbody, this[mailkey].from, mailkey));
+        	}
+                if(this[mailkey].body.length > "70"){
+                let longbody = this[mailkey].body.substring(0, 70) + "...";
+                outputmail.append(createMails(this[mailkey].subject, longbody, this[mailkey].from, mailkey));
+                }
+	}
 
-        for (var mail in mails){
+	})
+        /*for (var mail in mails){
 
             if(mails[mail].body.length < "70"){
                 let shortbody = mails[mail].body;
@@ -152,7 +192,7 @@ $(document).ready(function () {
                 outputmail.append(createMails(mails[mail].subject, longbody, mails[mail].from, mail));
             }
 
-        }
+        }*/
 
         $(".showmailpopup").on("click", function () {
             showModalMail(mails, $(this)[0].id.split("-")[1]);
@@ -187,7 +227,18 @@ $(document).ready(function () {
 
         console.log("MAILID :" + mailID);
 
-        delete inputmails[mailID];
+        //delete globalmails[mailID];
+
+	$.ajax({
+            type: "POST",
+            url: 'php/deletemail.php',
+            dataType: 'json',
+            data: {arguments: mailID},
+
+            success: function (obj) {
+                console.log(obj);
+            }
+        });
 
         //request("/api/info/deleteProduct", "POST", "id=" + productID, function (result) {
 
@@ -204,7 +255,7 @@ $(document).ready(function () {
                 uiBox.html(createDismissibleMessage("danger", "Fejl", "Produktet er ikke blevet slettet"));
             }*/
 
-        getmails(inputmails);
+        getmails(globalmails);
         emptymailbox();
 
         //});
@@ -219,7 +270,7 @@ $(document).ready(function () {
     }
     function emptymailbox() {
         const mailbox = $("#inmails");
-        if(isEmpty(inputmails)){
+        if(isEmpty(globalmails)){
             mailbox.html("DER ER INGEN MAILS!");
         }
 

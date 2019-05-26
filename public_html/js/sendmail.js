@@ -98,6 +98,9 @@ $(document).ready(function () {
         var to = document.getElementById("sendto").value;
         var subject = document.getElementById("sendsubject").value;
         var message = document.getElementById("sendbody").value;
+	//console.log(to);
+	//console.log(subject);
+	//console.log(message);
 
         var statusser = ['Tillykke', 'Indtast modtager og emne'];
 
