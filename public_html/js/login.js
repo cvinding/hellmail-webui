@@ -47,6 +47,7 @@ $(document).ready(function () {
                 }
             });
 
+<<<<<<< HEAD
 	$.ajax({
 		data:{
 			brugernavn : brugernavn
@@ -61,6 +62,23 @@ $(document).ready(function () {
 
 
 	});
+=======
+            $.ajax({
+                data: {
+                    brugernavn : brugernavn
+                },
+                url: 'php/getMails.php',
+                method: 'POST', // or GET
+
+                success: function(msg) {
+                    //console.log(statusser[msg.status]);
+                    //console.log(msg);
+                },
+                error: function (msg) {
+                    //console.log(msg);
+                }
+            });
+>>>>>>> 0399258a2d7b12e7911f9d49125ca9fb0bfcb06a
         }
 
 
